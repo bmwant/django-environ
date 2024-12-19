@@ -18,6 +18,7 @@ import os
 import re
 import sys
 import warnings
+from typing import Union, TypeVar, List, Tuple, Dict
 from urllib.parse import (
     parse_qs,
     ParseResult,
@@ -206,7 +207,7 @@ class Env:
     def __contains__(self, var):
         return var in self.ENVIRON
 
-    def str(self, var, default=NOTSET, multiline=False):
+    def str(self, var, default: Union[str, NoValue] = NOTSET, multiline=False) -> str:
         """
         :rtype: str
         """
@@ -215,7 +216,7 @@ class Env:
             return re.sub(r'(\\r)?\\n', r'\n', value)
         return value
 
-    def bytes(self, var, default=NOTSET, encoding='utf8'):
+    def bytes(self, var, default: Union[bytes, NoValue] = NOTSET, encoding='utf8') -> bytes:
         """
         :rtype: bytes
         """
@@ -224,19 +225,19 @@ class Env:
             return value.encode(encoding)
         return value
 
-    def bool(self, var, default=NOTSET):
+    def bool(self, var, default: Union[bool, NoValue] = NOTSET) -> bool:
         """
         :rtype: bool
         """
         return self.get_value(var, cast=bool, default=default)
 
-    def int(self, var, default=NOTSET):
+    def int(self, var, default: Union[int, NoValue] = NOTSET) -> int:
         """
         :rtype: int
         """
         return self.get_value(var, cast=int, default=default)
 
-    def float(self, var, default=NOTSET):
+    def float(self, var, default: Union[float, NoValue] = NOTSET) -> float:
         """
         :rtype: float
         """
@@ -248,7 +249,7 @@ class Env:
         """
         return self.get_value(var, cast=json.loads, default=default)
 
-    def list(self, var, cast=None, default=NOTSET):
+    def list(self, var, cast=None, default=NOTSET) -> List:
         """
         :rtype: list
         """
@@ -258,7 +259,7 @@ class Env:
             default=default
         )
 
-    def tuple(self, var, cast=None, default=NOTSET):
+    def tuple(self, var, cast=None, default=NOTSET) -> Tuple:
         """
         :rtype: tuple
         """
@@ -268,13 +269,13 @@ class Env:
             default=default
         )
 
-    def dict(self, var, cast=dict, default=NOTSET):
+    def dict(self, var, cast=dict, default=NOTSET) -> Dict:
         """
         :rtype: dict
         """
         return self.get_value(var, cast=cast, default=default)
 
-    def url(self, var, default=NOTSET):
+    def url(self, var, default=NOTSET) -> ParseResult:
         """
         :rtype: urllib.parse.ParseResult
         """
@@ -285,7 +286,7 @@ class Env:
             parse_default=True
         )
 
-    def db_url(self, var=DEFAULT_DATABASE_ENV, default=NOTSET, engine=None):
+    def db_url(self, var=DEFAULT_DATABASE_ENV, default=NOTSET, engine=None) -> Dict:
         """Returns a config dictionary, defaulting to DATABASE_URL.
 
         The db method is an alias for db_url.
@@ -299,7 +300,7 @@ class Env:
 
     db = db_url
 
-    def cache_url(self, var=DEFAULT_CACHE_ENV, default=NOTSET, backend=None):
+    def cache_url(self, var=DEFAULT_CACHE_ENV, default=NOTSET, backend=None) -> Dict:
         """Returns a config dictionary, defaulting to CACHE_URL.
 
         The cache method is an alias for cache_url.
@@ -313,7 +314,7 @@ class Env:
 
     cache = cache_url
 
-    def email_url(self, var=DEFAULT_EMAIL_ENV, default=NOTSET, backend=None):
+    def email_url(self, var=DEFAULT_EMAIL_ENV, default=NOTSET, backend=None) -> Dict:
         """Returns a config dictionary, defaulting to EMAIL_URL.
 
         The email method is an alias for email_url.
@@ -327,7 +328,7 @@ class Env:
 
     email = email_url
 
-    def search_url(self, var=DEFAULT_SEARCH_ENV, default=NOTSET, engine=None):
+    def search_url(self, var=DEFAULT_SEARCH_ENV, default=NOTSET, engine=None) -> Dict:
         """Returns a config dictionary, defaulting to SEARCH_URL.
 
         :rtype: dict
@@ -337,7 +338,7 @@ class Env:
             engine=engine
         )
 
-    def path(self, var, default=NOTSET, **kwargs):
+    def path(self, var, default: Union['Path', NoValue] = NOTSET, **kwargs) -> 'Path':
         """
         :rtype: Path
         """
